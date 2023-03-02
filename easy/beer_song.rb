@@ -4,20 +4,14 @@
 # The class method verse returns a string lyrics.
 
 class BeerSong
-  def self.verses(*num)
-    num[0].downto(num[-1]).map do |n|
-      if n == 2
-        "#{n} bottles of beer on the wall, #{n} bottles of beer.\n" \
-        "Take one down and pass it around, #{n - 1} bottle of beer on the wall.\n"
-      elsif n == 1
-        "#{n} bottle of beer on the wall, #{n} bottle of beer.\n" \
-        "Take it down and pass it around, no more bottles of beer on the wall.\n"
-      elsif n.zero?
-        "No more bottles of beer on the wall, no more bottles of beer.\n" \
-        "Go to the store and buy some more, 99 bottles of beer on the wall.\n"
+  def self.verses(*nums)
+    nums[0].downto(nums[-1]).map do |num|
+      case num
+      when 2 then two_bottle_verse
+      when 1 then one_bottle_verse
+      when 0 then zero_bottle_verse
       else
-        "#{n} bottles of beer on the wall, #{n} bottles of beer.\n" \
-        "Take one down and pass it around, #{n - 1} bottles of beer on the wall.\n"
+        default_verse(num)
       end
     end.join("\n")
   end
@@ -28,5 +22,27 @@ class BeerSong
 
   def self.lyrics
     verses(99, 0)
+  end
+
+  class << self
+    def default_verse(n)
+      "#{n} bottles of beer on the wall, #{n} bottles of beer.\n" \
+      "Take one down and pass it around, #{n - 1} bottles of beer on the wall.\n"
+    end
+
+    def two_bottle_verse
+      "2 bottles of beer on the wall, 2 bottles of beer.\n" \
+      "Take one down and pass it around, 1 bottle of beer on the wall.\n"
+    end
+
+    def one_bottle_verse
+      "1 bottle of beer on the wall, 1 bottle of beer.\n" \
+      "Take it down and pass it around, no more bottles of beer on the wall.\n"
+    end
+
+    def zero_bottle_verse
+      "No more bottles of beer on the wall, no more bottles of beer.\n" \
+      "Go to the store and buy some more, 99 bottles of beer on the wall.\n"
+    end
   end
 end
