@@ -32,13 +32,9 @@ class Robot
   def name
     return @name if @name
 
-    new_name = generate_name
-    if @@names.include?(new_name)
-      new_name = generate_name while @@names.include?(new_name)
-    else
-      @@names << new_name
-      @name = new_name
-    end
+    new_name = generate_name while @@names.include?(new_name)
+    @@names << new_name
+    @name = new_name
   end
 
   def reset
