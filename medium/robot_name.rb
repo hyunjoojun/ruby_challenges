@@ -1,63 +1,68 @@
 # Problem:
-# We have robots that have no name.
-# When we boot them up, a random name is generated with two capital letters and random
-# 3 digits of numbers.
-# When we reset robot to factory settings, name gets wiped.
-# Next time we boot them up, they get a new name.
-# The name have to be random, and it cannot be used twice.
+# When robot is created, they have no name.
+# When we boot them up, a random name is generated.
+# The robot name starts with 2 letters and ends with 3 digit numbers.
+# We need to reset the robot to factory settings this will delete the name.
+# Next time when we boot them up, a new name is assigned.
+# Names must be random.
+# All robots have different names (Cannot be the same)
 # Algorithm:
-# - Create Robot class
-# - The instance method name assigns a new name to the robot.
-# - When we instantiate a robot object, there is no name.
-# - The name method:
-# - We have to generate random robot name.
-# - Starts with two capital letters
-# - Ends with 3 digit numbers
-# - ('A'..'Z').to_a for letters
-# - (0..9).to_a for digits
-# - We should mutate the original array so that we don't get the same name twice.
-# - The name method should return the new name
+# Create Robot class
+# Create instance method name that generates the random name.
+# When new robot is instantiated, there is no name.
+# The name method should return name if there is name already.
+# If name is nil, generate new name.
+# Constructor method:
+# No arguments needed, should have @name = nil
+# Name method:
+# - If name is nil, generate new name.
+# - If name is truthy, return name.
+# - Generating name..
+# - Two random letters
+# - Three random numbers
+# - Combine them together.
 
 class Robot
-  @@existing_names = []
+  @@names = []
+
+  def initialize
+    @name = nil
+  end
 
   def name
     return @name if @name
 
-    new_name = create_name
-    if @name.nil? && !duplicate?(new_name)
-      @name = new_name
+    new_name = generate_name
+    if @@names.include?(new_name)
+      new_name = generate_name while @@names.include?(new_name)
     else
-      @name = create_name
+      @@names << new_name
+      @name = new_name
     end
-    @name
-  end
-
-  def create_name
-    current_name = (two_random_letters + random_three_digits).join
-    @@existing_names << current_name
-    current_name
-  end
-
-  def duplicate?(name)
-    @@existing_names.include?(name)
   end
 
   def reset
+    @@names.delete(@name)
     @name = nil
+  end
+
+  private
+
+  def generate_name
+    two_random_letters + three_random_digits
   end
 
   def two_random_letters
     letters = ('A'..'Z').to_a
-    two_letters = []
-    2.times { two_letters << letters.shuffle!.pop }
+    two_letters = ''
+    2.times { two_letters << letters.shuffle.pop }
     two_letters
   end
 
-  def random_three_digits
-    numbers = (0..9).to_a
+  def three_random_digits
+    digits = (0..9).to_a
     three_digits = []
-    3.times { three_digits << numbers.shuffle!.pop }
-    three_digits
+    3.times { three_digits << digits.shuffle.pop }
+    three_digits.join
   end
 end
