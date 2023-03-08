@@ -16,12 +16,12 @@
 # - 9 -> 9.00
 
 class Clock
-  attr_reader :hours, :minutes, :total
+  attr_reader :hours, :minutes, :total_mins
 
-  def initialize(hour, minutes = 0)
-    @hours = hour
+  def initialize(hours, minutes = 0)
+    @hours = hours
     @minutes = minutes
-    @total = convert_to_min
+    @total_mins = convert_to_min
   end
 
   def self.at(hour, min = 0)
@@ -29,13 +29,13 @@ class Clock
   end
 
   def +(other)
-    @total += other
+    @total_mins += other
     convert_to_hour
     self.class.new(hours, minutes)
   end
 
   def -(other)
-    @total -= other
+    @total_mins -= other
     convert_to_hour
     self.class.new(hours, minutes)
   end
@@ -45,18 +45,18 @@ class Clock
   end
 
   def ==(other)
-    total == other.total
+    total_mins == other.total_mins
   end
 
   private
 
   def convert_to_min
-    total_mins = hours * 60
-    total_mins + minutes
+    hours_to_mins = hours * 60
+    hours_to_mins + minutes
   end
 
   def convert_to_hour
-    @hours, @minutes = total.divmod(60)
-    @hours = hours % 24 if hours >= 24 || hours.negative?
+    @hours, @minutes = total_mins.divmod(60)
+    @hours = hours % 24
   end
 end
