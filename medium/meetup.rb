@@ -22,6 +22,15 @@ require 'date'
 
 class Meetup
   SCHEDULE = ['first', 'second', 'third', 'fourth', 'fifth']
+  WEEKDAYS = {
+    sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6
+  }
 
   def initialize(year, month)
     @year = year
@@ -32,7 +41,7 @@ class Meetup
     valid_days = []
     1.upto(31) do |day|
       t = Time.local(@year, @month, day)
-      valid_days << day if right_weekday?(t, weekday)
+      valid_days << day if t.wday == WEEKDAYS[weekday.downcase.to_sym]
     end
     the_day = right_schedule(valid_days, schedule)
     return the_day if the_day.nil?
@@ -50,18 +59,6 @@ class Meetup
 
   def valid_day?(time)
     time.month == @month
-  end
-
-  def right_weekday?(time, weekday)
-    case weekday.downcase
-    when 'monday' then time.monday?
-    when 'tuesday' then time.tuesday?
-    when 'wednesday' then time.wednesday?
-    when 'thursday' then time.thursday?
-    when 'friday' then time.friday?
-    when 'saturday' then time.saturday?
-    when 'sunday' then time.sunday?
-    end
   end
 
   def right_schedule(array, schedule)

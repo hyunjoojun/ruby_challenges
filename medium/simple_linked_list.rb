@@ -23,44 +23,60 @@ class Element
 end
 
 class SimpleLinkedList
-  attr_accessor :list
+  attr_reader :size, :head
 
-  def initialize(input=[])
-    @list = input.map { |num| Element.new(num) }
+  def initialize
+    @size = 0
   end
 
-  def self.from_a(input)
-    return new if input.nil?
-    new(input)
-  end
+  def self.from_a(array)
+    array = [] if array.nil?
+    list = new
 
-  def to_a
-    list.to_a
-  end
-
-  def size
-    list.size
-  end
-
-  def head
-    list.last
-  end
-
-  def peek
-    return nil if empty?
-    head.datum
+    array.reverse_each do |datum|
+      list.push(datum)
+    end
+    list
   end
 
   def empty?
-    list.empty?
+    size.zero?
   end
 
   def push(datum)
-    new_head = head
-    @list << Element.new(datum, new_head)
+    new_ele = Element.new(datum, @head)
+    @size += 1
+    @head = new_ele
+  end
+
+  def peek
+    head&.datum if head
   end
 
   def pop
-    list.pop.datum
+    datum = peek
+    new_head = @head.next
+    @head = new_head
+    @size -= 1
+    datum
+  end
+
+  def to_a
+    array = []
+    current_ele = head
+    while current_ele
+      array << current_ele.datum
+      current_ele = current_ele.next
+    end
+    array
+  end
+
+  def reverse
+    current_list = to_a
+    new_list = SimpleLinkedList.new
+    current_list.each do |ele|
+      new_list.push(ele)
+    end
+    new_list
   end
 end
