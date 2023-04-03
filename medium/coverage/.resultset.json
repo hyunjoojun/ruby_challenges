@@ -1,0 +1,32 @@
+{
+  "Minitest": {
+    "coverage": {
+      "/Users/hyunjoojun/projects/ruby_challenges/medium/calorie_tracker.rb": {
+        "lines": [
+          null,
+          1,
+          1,
+          null,
+          1,
+          2,
+          2,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null
+        ]
+      }
+    },
+    "timestamp": 1678980623
+  }
+}
